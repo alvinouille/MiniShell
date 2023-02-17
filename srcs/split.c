@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:55:05 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/14 15:06:09 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/02/17 01:25:40 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ char	**first_split(char *str)
     int     state;
 
     state = 0;
-	if (!str || str[0] == 0)
-		return (NULL);
-	if (count_words(str) == 0)
+	if (!str)
 		return (NULL);
 	tab = (char **) malloc(sizeof(char *) * (count_words(str) + 1));
 	if (!tab)

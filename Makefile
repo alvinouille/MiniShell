@@ -1,38 +1,58 @@
+NAME = minishell
 
-NAME	= minishell
+CC = cc
 
-SRC		=	srcs/split.c \
-			srcs/split_utils.c \
-			srcs/tokenisation.c \
-			srcs/utils.c \
-			srcs/inutils.c \
-			srcs/trash.c \
-			srcs/main.c
+CFLAGS = -Wall -Werror -Wextra -MMD
 
-OBJS    = ${SRC:.c=.o}
+LIBS = -L/usr/local/lib -I/usr/local/include -lreadline
 
-OPTION 	= -I ./inc/
+SRC_PATH = srcs/
+INC_PATH = inc/
+OBJ_PATH = obj/
 
-CC		= gcc
-RM		= rm -f
+SRCS =	main.c			\
+		inutils.c		\
+		lst.c			\
+		split_utils.c	\
+		split.c			\
+		tokenisation.c	\
+		trash.c			\
+		utils.c			\
+		split_state.c
 
-CFLAGS	= -Wall -Wextra -Werror
+
+OBJ = $(SRCS:.c=.o)
 
 
-.c.o:
-			${CC} -c ${CFLAGS} ${OPTION} $< -o ${<:.c=.o}
+OBJS = $(addprefix $(OBJ_PATH), $(OBJ))
 
-${NAME}:	${OBJS}
-			${CC} -o ${NAME} ${OBJS} -L/usr/local/lib -I/usr/local/include -lreadline
+DEP = $(OBJS:.o=.d)
 
-all:		${NAME}
+$(OBJ_PATH)%.o : $(SRC_PATH)%.c
+	@mkdir -p $(OBJ_PATH)
+	@echo [CC] $<
+	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_PATH)
 
-clean:
-			${RM} ${OBJS}
+test : CFLAGS= -Wall -Wextra -g3 -fsanitize=address -MMD
 
-fclean:		clean
-			${RM} ${NAME}
 
-re:			fclean all
+all : $(NAME)
 
-.PHONY: all clean fclean re
+$(NAME) :  $(OBJS)
+		@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+		@printf "\n"
+		@echo "Compiling done"
+
+test : fclean $(NAME)
+
+clean :
+		rm -rf $(OBJ_PATH)
+
+fclean : clean
+		rm -rf $(NAME)
+
+re : fclean $(NAME)
+
+.PHONY : all clean fclean re directories
+
+-include $(DEP)

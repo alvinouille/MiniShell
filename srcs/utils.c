@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 16:29:15 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/14 18:37:28 by alvina           ###   ########.fr       */
+/*   Updated: 2023/02/16 22:11:50 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
 
 void	ft_putstr_fd(char *s, int fd)
 {
@@ -22,43 +34,6 @@ void	ft_putstr_fd(char *s, int fd)
     write(fd, s, i);
 }
 
-t_token	*ft_lstadd_back(t_token **lst, t_token *new)
-{
-	t_token	*last;
-
-	last = NULL;
-	if (*lst == NULL)
-		*lst = new;
-	else
-	{
-		last = ft_lstlast(*lst);
-		last->next = new;
-	}
-	return (*lst);
-}
-
-t_token	*ft_lstnew(char *str)
-{
-	t_token	*lst;
-
-	lst = malloc(sizeof(t_token));
-	if (!lst)
-		return (NULL);
-	lst->value = str;
-	lst->type = 0;
-	lst->next = NULL;
-	return (lst);
-}
-
-t_token	*ft_lstlast(t_token *lst)
-{
-	if (lst->next)
-	{
-		while (lst && lst->next)
-			lst = lst->next;
-	}
-	return (lst);
-}
 
 char	*ft_strnstr(char *big, char *little, int len)
 {
@@ -88,14 +63,14 @@ char	*ft_strnstr(char *big, char *little, int len)
 	return (0);
 }
 
-int	ft_strlen(char *str)
+bool	ft_strcmp(const char *s1, const char *s2)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
+	while (s1[i] == s2[i] && (s1[i] || s2[i]))
 		i++;
-	return (i);
+	if (s1[i] == s2[i])
+		return (true);
+	return (false);
 }
