@@ -6,7 +6,7 @@
 #    By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/02/17 17:42:22 by mmeguedm         ###   ########.fr        #
+#    Updated: 2023/02/17 20:53:43 by mmeguedm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,10 @@ CFLAGS		= -Wall -Werror -Wextra -I $(INC_PATH)
 
 LIBS		= -L/usr/local/lib -I/usr/local/include -lreadline
 
-
+RED='\033[0;32m'
 # --------- Include files path ------------------------------------------------------
 
-INC_PATH	= /mnt/nfs/homes/mmeguedm/Desktop/Projects/MiniShell/inc
+INC_PATH	= /mnt/nfs/homes/mmeguedm/Desktop/Projects/MiniShell/inc/
 
 # --------- Sources files path ------------------------------------------------------
 
@@ -36,50 +36,58 @@ OBJ_PATH	= obj/
 PS_OBJ_PATH = $(OBJ_PATH)parsing/
 MN_OBJ_PATH = $(OBJ_PATH)main/
 
+# --------- Header files -----------------------------------------------------------
 
-PARS_SRCS	= inutils.c 		\
-			lst.c 			\
-			split_utils.c 	\
-			split.c			\
-			tokenisation.c	\
-			trash.c			\
-			utils.c			\
-			split_state.c
+INC			= $(addprefix $(INC_PATH),		\
+					minishell.h				\
+					tools.h					\
+					utils.h					\
+					lst.h					\
+				)
 
-MAIN_SRCS = main.c
+# --------- Sources files -----------------------------------------------------------
 
-#	OBJECTS FILES
-OBJ = $(SRCS:.c=.o)
-PARS_OBJ = $(PARS_SRCS:.c=.o)
-MAIN_OBJ = $(MAIN_SRCS:.c=.o)
+SRC			=	$(addprefix $(SRC_PATH),					\
+					main/main.c								\
+					$(addprefix parsing/,					\
+						inutils.c 							\
+						lst.c 								\
+						split_utils.c 						\
+						split.c								\
+						tokenisation.c						\
+						trash.c								\
+						utils.c								\
+						split_state.c						\
+					)										\
+				)
 
-#	
-OBJS = $(addprefix $(OBJ_PATH), $(OBJ))
-PARS_OBJS = $(addprefix $(PS_OBJ_PATH), $(PARS_OBJ))
-MAIN_OBJS = $(addprefix $(MN_OBJ_PATH), $(MAIN_OBJ))
+# --------- Object files ------------------------------------------------------------
 
-DEP = $(OBJS:.o=.d)
+OBJ			=	$(patsubst srcs/%.c, obj/%.o, $(SRC))
 
-$(PS_OBJ_PATH)%.o : $(PS_SRC_PATH)%.c
-	@mkdir -p $(PS_OBJ_PATH)
-	@echo [CC] $<
-	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_PATH)
+# --------- Compiling ---------------------------------------------------------------
 
-$(MN_OBJ_PATH)%.o : $(MN_SRC_PATH)%.c
-	@mkdir -p $(MN_OBJ_PATH)
-	@echo [CC] $<
-	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_PATH)
+obj/%.o: srcs/%.c $(INC)
+	@ mkdir -p $(dir $@)
+	@ printf "%-60s\r" "'\033[0;31m'Compiling $<"
+	@ $(CC) $(CFLAGS) -c $< -o $@
 
-test : CFLAGS+= -g3 -fsanitize=address -MMD
+# --------- Linking -----------------------------------------------------------------
+
+$(NAME) : $(OBJ) $(INC)
+	@mkdir -p $(OBJ_PATH)
+	@$(CC) $(CFLAGS) $(LIBS) $(OBJ) -o $(NAME)
+	@printf "\n"
+	@echo "Compiling done !"
+	@cat .femtoshell.logo
+
+# --------- Phony targets -----------------------------------------------------------
 
 all : $(NAME)
 
-$(NAME) : $(PARS_OBJS) $(MAIN_OBJS)
-	@$(CC) $(CFLAGS) $(PARS_OBJS) $(MAIN_OBJS) $(LIBS) -o $(NAME) -I $(INC_PATH)
-	@printf "\n"
-	@echo "Compiling done"
-
 test : fclean $(NAME)
+
+test : CFLAGS+= -g3 -fsanitize=address -MMD
 
 clean :
 		rm -rf $(OBJ_PATH) 
@@ -89,6 +97,4 @@ fclean : clean
 
 re : fclean $(NAME)
 
-.PHONY : all clean fclean re directories
-
--include $(DEP)
+.PHONY : all clean fclean re directories test
