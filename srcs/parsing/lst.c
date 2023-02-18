@@ -6,25 +6,51 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:32:27 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/16 17:33:08 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/18 04:19:50 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*ft_lstadd_back(t_token **lst, t_token *new)
-{
-	t_token	*last;
+// t_token	*ft_lstadd_back(t_token **lst, t_token *new)
+// {
+// 	t_token	*last;
 
-	last = NULL;
-	if (*lst == NULL)
-		*lst = new;
+// 	last = NULL;
+// 	if (*lst == NULL)
+// 		*lst = new;
+// 	else
+// 	{
+// 		last = ft_lstlast(*lst);
+// 		last->next = new;
+// 	}
+// 	return (*lst);
+// }
+
+void	init_list(t_dblist *l)
+{
+	l->first = NULL;
+	l->last = NULL;
+}
+
+void	add_node_back(t_dblist *l, char *str, int *index)
+{
+	t_token	*new;
+
+	new = malloc(sizeof(*new));
+	if (!new)
+		return (lstclear(l), free_exit(NULL));
+	new->prev = l->last;
+	new->next = NULL;
+	if (index)
+		new->value = get_token(str, index);
 	else
-	{
-		last = ft_lstlast(*lst);
-		last->next = new;
-	}
-	return (*lst);
+		new->value = str;
+	if (l->last)
+		l->last->next = new;
+	else
+		l->first = new;
+	l->last = new;
 }
 
 t_token	*ft_lstnew(char *str)
@@ -48,4 +74,28 @@ t_token	*ft_lstlast(t_token *lst)
 			lst = lst->next;
 	}
 	return (lst);
+}
+
+// void	*new_token(t_token **lst, char *str)
+// {
+// 	t_token		*new;
+
+// 	new = ft_lstnew(str);
+// 	if (!new)
+// 		return (NULL);
+// 	return (ft_lstadd_back(lst, new));
+// }
+
+/*	Only required to get information about the linked list  
+ *	IMPORTANT NOTICE : remove before final push  
+ */
+
+void	print_lst(t_dblist dblist)
+{
+	while (dblist.first)
+	{
+		printf("value : %s\n", dblist.first->value);
+		printf("%d\n", dblist.first->type);
+		dblist.first = dblist.first->next;
+	}
 }

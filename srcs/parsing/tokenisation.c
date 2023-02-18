@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:33:36 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/02/13 20:33:21 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/02/18 02:01:23 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,32 @@ int	what_red(char *str)
 		return (ROUT);
 }
 
-void	tokenisation(t_token **lst)
+void	tokenisation(t_dblist *dblist)
 {
 	t_token *previous;
+	t_token	*buf;
 
+	buf = dblist->first;
 	previous = NULL;
-	while (*lst)
+	while (buf)
 	{
-		if (is_pipe((*lst)->value))
-			(*lst)->type = PIPE;
-		else if (is_red((*lst)->value))
-			(*lst)->type = what_red((*lst)->value);
+		if (is_pipe(buf->value))
+			buf->type = PIPE;
+		else if (is_red(buf->value))
+			buf->type = what_red(buf->value);
 		else if (previous)
 		{
 			if (is_red(previous->value))
 			{
 				if (previous->type == 5)
-					(*lst)->type = LIM;
+					buf->type = LIM;
 				else
-					(*lst)->type = FD;
+					buf->type = FD;
 			}
 		}
 		else
-			(*lst)->type = WORD;
-		previous = *lst;
-		(*lst) = (*lst)->next;
+			buf->type = WORD;
+		previous = buf;
+		buf = buf->next;
 	}
 }

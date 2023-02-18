@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   generic_split.c                                    :+:      :+:    :+:   */
+/*   split_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 22:02:38 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/17 02:29:01 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/18 04:16:49 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static bool	new_state(char c, int state)
 {
@@ -33,7 +32,7 @@ static bool	new_state(char c, int state)
 	return (false);
 }
 
-static int	get_state(char c)
+int	get_state(char c)
 {
 	if (c == '\'')
 		return (SP_QUOTES);
@@ -42,7 +41,7 @@ static int	get_state(char c)
 	return (NONE);
 }
 
-char	*ft_strdup(char *str, int *k)
+char	*get_token(char *str, int *k)
 {
 	char			*dup;
 	int				j;
@@ -72,7 +71,7 @@ char	*ft_strdup(char *str, int *k)
 	return (dup);
 }
 
-int	countwords(char *str)
+static int	countwords(char *str)
 {
 	int		index;
 	int		word;
@@ -98,45 +97,51 @@ int	countwords(char *str)
 	return (word);
 }
 
-char	**ft_split(char *str)
+void	split_state(t_dblist *old_dblist)
 {
-	static int		k = 0;
-	char	**split;
-	int		index;
-	int		i;
+	static int	index = 0;
+	t_dblist	new_dblist;
+	t_token		*tmp;
+	int			j;
 
-	if (!str)
-		return (NULL);
-	i = 0;
-	index = 0;
-	split = malloc(sizeof(char *) * (countwords(str) + 1));
-	if (!split)
-		return (NULL);
-	while(i < countwords(str))
+	init_list(&new_dblist);
+	tmp = old_dblist->first;
+	while (tmp)
 	{
-		split[i] = ft_strdup(str, &k);
-		i++;
+		j = -1;
+		while (++j < countwords(tmp->value))
+			add_node_back(&new_dblist, tmp->value, &index);
+		tmp = tmp->next;
+		index = 0;
 	}
-	split[i] = 0;
-	k = 0;
-	return (split);
+	(*old_dblist) = new_dblist;
 }
 
 // int main(int argc, char **argv)
 // {
 // 	int		i;
-// 	char	**splited;
-// 	char	*str;
-
-// 	str = "'\"\"'\"a\"$L'+2'$HOME_\"'''\"ab  ";
+// 	char	*str1;
+// 	char	*str2;
+// 	t_token	*head;
+// 	t_token	*splited;
+	
+// 	// str1  = "'\"\"'\"a\"$L'+2'$HOME_\"'''\"ab  ";
 // 	i = 0;
-// 	printf("str : %s\n", str);
-// 	splited = ft_split(str);
-// 	if (argc != 2)
-// 		return (-1);
-// 	while (splited[i])
+// 	str1  = "echo";
+// 	str2 = "\"a\"$L'+2'$HOME_";
+// 	new_token(&head, str1);
+// 	new_token(&head, str2);
+// 	splited = split_state(head);
+// 	while (splited != NULL)
 // 	{
-// 		printf("splited : |%s|\n", splited[i]);
 // 		i++;
+// 		// printf("str : %s\n", splited->value);
+// 		splited = splited->next;
 // 	}
+// 	printf("i : %d\n", i);
+// 	// while (splited[i])
+// 	// {
+// 	// 	printf("splited : |%s|\n", splited[i]);
+// 	// 	i++;
+// 	// }
 // }

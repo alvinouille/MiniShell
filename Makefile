@@ -6,7 +6,7 @@
 #    By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/02/17 20:53:43 by mmeguedm         ###   ########.fr        #
+#    Updated: 2023/02/18 04:03:08 by mmeguedm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,10 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Werror -Wextra -I $(INC_PATH)
+CFLAGS		= -Wall -Wextra -I $(INC_PATH)
 
 LIBS		= -L/usr/local/lib -I/usr/local/include -lreadline
 
-RED='\033[0;32m'
 # --------- Include files path ------------------------------------------------------
 
 INC_PATH	= /mnt/nfs/homes/mmeguedm/Desktop/Projects/MiniShell/inc/
@@ -50,14 +49,16 @@ INC			= $(addprefix $(INC_PATH),		\
 SRC			=	$(addprefix $(SRC_PATH),					\
 					main/main.c								\
 					$(addprefix parsing/,					\
-						inutils.c 							\
 						lst.c 								\
 						split_utils.c 						\
 						split.c								\
 						tokenisation.c						\
-						trash.c								\
+						memory_free.c						\
 						utils.c								\
 						split_state.c						\
+						singleton.c							\
+						expansion.c							\
+						error.c								\
 					)										\
 				)
 
@@ -69,7 +70,7 @@ OBJ			=	$(patsubst srcs/%.c, obj/%.o, $(SRC))
 
 obj/%.o: srcs/%.c $(INC)
 	@ mkdir -p $(dir $@)
-	@ printf "%-60s\r" "'\033[0;31m'Compiling $<"
+	@ printf "%-60s\r" "Compiling $<"
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
 # --------- Linking -----------------------------------------------------------------
@@ -77,9 +78,11 @@ obj/%.o: srcs/%.c $(INC)
 $(NAME) : $(OBJ) $(INC)
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CFLAGS) $(LIBS) $(OBJ) -o $(NAME)
-	@printf "\n"
-	@echo "Compiling done !"
-	@cat .femtoshell.logo
+	@printf "\n\n"
+	@echo "\033[1;32mCompiling done !"
+	@echo "\033[1;36m"
+	@cat .femtoshell.logo.c
+	@echo "\033[0m"
 
 # --------- Phony targets -----------------------------------------------------------
 

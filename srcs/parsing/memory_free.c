@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   trash.c                                            :+:      :+:    :+:   */
+/*   memory_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:43:34 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/02/14 15:34:34 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/02/18 01:46:14 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstclear(t_token **list)
+void	lstclear(t_dblist *l)
 {
-	t_token	*head;
+	t_token	*buf;
 	t_token	*body;
 
-	if (!list || !(*list))
+	if (!l->first)
 		return ;
-	head = *list;
-	while (head)
+	buf = l->first;
+	while (buf)
 	{
-		body = head->next;
-		free(head);
-		head = body;
+		body = buf->next;
+		free(body);
+		buf = buf->next;
 	}
 }
 
