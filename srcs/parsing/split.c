@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/08 09:55:05 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/17 01:25:40 by mmeguedm         ###   ########.fr       */
+/*   Created: 2023/02/20 23:34:30 by mmeguedm          #+#    #+#             */
+/*   Updated: 2023/02/20 23:35:38 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stdlib.h>
 
-int	length(char *str, int *state)
+static int	ft_strrlen(const char *str)
 {
 	int	i;
 
@@ -20,97 +20,85 @@ int	length(char *str, int *state)
 	if (!str)
 		return (0);
 	while (str[i])
-	{
-		if (*state == 0 && is_separator(&str[i]))
-			return (i);
 		i++;
-		*state = changing_state(str[i], *state);
-	}
 	return (i);
 }
 
-int    wording_sep(char *str, char ***tab, int j, int (*f)(char *))
+static int	nb_words(char const *s, char c)
 {
-    int i;
-
-    i = 0;
-    (*tab)[j] = malloc(sizeof(char) * (f(str) + 1));
-    if (!(*tab)[j])
-		return (free_tab(*tab, j), 0);
-	while (f(&str[i]) && str[i])
-	{
-		(*tab)[j][i] = str[i];
-		i++;
-	}
-	(*tab)[j][i] = '\0';
-	return (i);
-}
-
-int		wording_other(char *str, char ***tab, int j, int *state)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = length(str, state);
-	(*tab)[j] = malloc(sizeof(char) * len + 1);
-	if (!(*tab)[j])
-		return (free_tab(*tab, j), 0);
-	while (i < len)
-	{
-		(*tab)[j][i] = str[i];
-		i++;
-	}
-	(*tab)[j][i] = '\0';
-	return (i);
-}
-
-char	**splitting(char **tab, char *str, int state)
-{
-	int	j;
+	int	nb_words;
+	int	check_word;
 	int	i;
 
 	i = 0;
-	j = 0;
-	while (str[i])
+	check_word = 1;
+	nb_words = 0;
+	while (s[i])
 	{
-
-        state = changing_state(str[i], state);
-        if (state == 0 && is_separator(&str[i]))
-        {
-            if (!is_space(&str[i]))
-            {
-                if (is_pipe(&str[i]))
-                    i += wording_sep(&str[i], &tab, j, is_pipe);
-				else
-                    i += wording_sep(&str[i], &tab, j, is_red);
-			    j++;
-            }
-			else
-				i++;
-        }
-		else if (str[i] != ' ' || state != 0)
+		if (s[i] != c && check_word)
 		{
-			i += wording_other(&str[i], &tab, j, &state);
-			j++;
+			nb_words++;
+			check_word = 0;
 		}
-		else
-			i++;
+		else if (s[i] == c)
+			check_word = 1;
+		i++;
 	}
-	tab[j] = 0;
-	return (tab);
+	return (nb_words);
 }
 
-char	**first_split(char *str)
+static char	*ft_initword(char *src, size_t endWord, size_t nbchar, char c)
 {
-	char	**tab;
-    int     state;
+	size_t	i;
+	int		begin;
+	char	*word;
 
-    state = 0;
-	if (!str)
+	begin = (endWord - nbchar);
+	if (begin < 0)
+		begin -= begin;
+	i = 0;
+	word = malloc(sizeof(char) * (nbchar + 1));
+	if (!word)
 		return (NULL);
-	tab = (char **) malloc(sizeof(char *) * (count_words(str) + 1));
-	if (!tab)
+	if (src[begin] == c || begin < 0)
+		begin ++;
+	while (src[begin] && i < nbchar)
+		word[i++] = src[begin++];
+	word[i] = '\0';
+	return (word);
+}
+
+static void	extra_init(int *index, int *nbchar, int *i)
+{
+	*i = 0;
+	*index = 0;
+	*nbchar = 0;
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**split;
+	int		i;
+	int		nbchar;
+	int		index;
+
+	if (!s)
 		return (NULL);
-	return (splitting(tab, str, state));
+	extra_init(&index, &nbchar, &i);
+	split = (char **)malloc(sizeof(char *) * (nb_words(s, c) + 1));
+	if (!split)
+		return (NULL);
+	while (i < ft_strrlen((char *)s))
+	{
+		if (s[i] != c)
+			nbchar++;
+		if ((s[i] == c || i == ft_strrlen((char *)s) - 1) && nbchar > 0)
+		{
+			split[index++] = ft_initword((char *)s, i, nbchar, c);
+			nbchar = 0;
+		}
+		i++;
+	}
+	split[index] = NULL;
+	return (split);
 }

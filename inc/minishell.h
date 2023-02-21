@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:53:47 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/18 03:40:55 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/20 23:25:17 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "utils.h"
 # include "tools.h"
 # include "lst.h"
+# include "parsing.h"
 
 /*	Declaration of the global variable required to manage the
 	exit_status code  */
@@ -35,7 +36,7 @@ void	lstclear(t_dblist *dblist);
 char	**free_tab(char **tab, int j);
 
 /*	The main program  */
-void	minishell(char *str);
+void	minishell(char *str, char **env);
 
 /*	Required to create the token  */
 int			is_space(char *str);
@@ -49,8 +50,6 @@ char		**splitting(char **tab, char *str, int state);
 int			wording_other(char *str, char ***tab, int j, int *state);
 int			wording_sep(char *str, char ***tab, int j, int (*f)(char *));
 int			length(char *str, int *state);
-void		split_state(t_dblist *old_dblist);
-char		*get_token(char *str, int *k);
 
 /*	Required to generate token  */
 void	*new_token(t_token **lst, char *str);

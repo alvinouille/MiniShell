@@ -6,7 +6,7 @@
 #    By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/02/18 04:03:08 by mmeguedm         ###   ########.fr        #
+#    Updated: 2023/02/21 00:12:31 by mmeguedm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,14 +51,15 @@ SRC			=	$(addprefix $(SRC_PATH),					\
 					$(addprefix parsing/,					\
 						lst.c 								\
 						split_utils.c 						\
-						split.c								\
+						first_split.c						\
+						expansion.c							\
 						tokenisation.c						\
 						memory_free.c						\
 						utils.c								\
-						split_state.c						\
+						add_token.c							\
 						singleton.c							\
-						expansion.c							\
 						error.c								\
+						split.c								\
 					)										\
 				)
 

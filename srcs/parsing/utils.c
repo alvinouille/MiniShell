@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 16:29:15 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/16 22:11:50 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/20 23:47:49 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,16 @@ bool	ft_strcmp(const char *s1, const char *s2)
 	if (s1[i] == s2[i])
 		return (true);
 	return (false);
+}
+
+char	*ft_strnchr(char *s1, char *s2, size_t len)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && (s1[i] || s2[i]) && --len)
+		i++;
+	if (s1[i] == s2[i])
+		return (&s1[i]);
+	return (NULL);
 }

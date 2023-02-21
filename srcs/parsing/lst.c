@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:32:27 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/18 04:19:50 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/21 00:54:52 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ void	init_list(t_dblist *l)
 {
 	l->first = NULL;
 	l->last = NULL;
+	l->first_env = NULL;
+	l->prev_env = NULL;
 }
 
-void	add_node_back(t_dblist *l, char *str, int *index)
+void	add_node_back_token(t_dblist *l, char *str, int *index)
 {
 	t_token	*new;
 
@@ -51,6 +53,24 @@ void	add_node_back(t_dblist *l, char *str, int *index)
 	else
 		l->first = new;
 	l->last = new;
+}
+
+void	add_node_back_env(t_dblist *l, char *key, char *value)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(*new));
+	if (!new)
+		return (lstclear(l), free_exit(NULL));
+	new->prev = l->prev_env;
+	new->next = NULL;
+	new->key = key;
+	new->value = value;
+	if (l->prev_env)
+		l->prev_env->next = new;
+	else
+		l->first_env = new;
+	l->prev_env = new;
 }
 
 t_token	*ft_lstnew(char *str)

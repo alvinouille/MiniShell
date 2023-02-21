@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_state.c                                      :+:      :+:    :+:   */
+/*   add_token.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 22:02:38 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/18 04:16:49 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/20 23:40:50 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*	The string will be split at each change of state.
+	A new_dblist containing splited token is created and
+	the old_dblist point to the new_dblist .
+*/
 
 static bool	new_state(char c, int state)
 {
@@ -68,7 +73,7 @@ char	*get_token(char *str, int *k)
 		}
 	}
 	dup[j] = '\0';
-	return (dup);
+	return (do_job(dup));
 }
 
 static int	countwords(char *str)
@@ -110,10 +115,11 @@ void	split_state(t_dblist *old_dblist)
 	{
 		j = -1;
 		while (++j < countwords(tmp->value))
-			add_node_back(&new_dblist, tmp->value, &index);
+			add_node_back_token(&new_dblist, tmp->value, &index);
 		tmp = tmp->next;
 		index = 0;
 	}
+
 	(*old_dblist) = new_dblist;
 }
 
