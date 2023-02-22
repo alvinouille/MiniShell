@@ -6,12 +6,16 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:12:42 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/21 01:07:32 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/22 19:49:30 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOOLS_H
 # define TOOLS_H
+
+# define INIT (1 << 0)
+# define NO_INIT (1 << 1)
+
 
 # define EXPAND 36
 
@@ -49,21 +53,19 @@ typedef struct s_cmd
 	int	b;
 }					t_cmd;
 
-
 typedef	struct	s_env
 {
 	char			*key;
 	char			*value;
 	struct s_env	*next;
 	struct s_env	*prev;
-}			t_env;
+}					t_env;
 
 typedef struct s_llptr
 {
 	t_token			*token;
 	t_cmd			*cmd;
 }					t_llptr;
-
 
 typedef struct s_dblist
 {

@@ -6,7 +6,7 @@
 #    By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/02/21 00:12:31 by mmeguedm         ###   ########.fr        #
+#    Updated: 2023/02/22 17:17:59 by mmeguedm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,17 +49,18 @@ INC			= $(addprefix $(INC_PATH),		\
 SRC			=	$(addprefix $(SRC_PATH),					\
 					main/main.c								\
 					$(addprefix parsing/,					\
-						lst.c 								\
-						split_utils.c 						\
-						first_split.c						\
-						expansion.c							\
-						tokenisation.c						\
-						memory_free.c						\
-						utils.c								\
 						add_token.c							\
-						singleton.c							\
 						error.c								\
+						expansion.c							\
+						first_split.c						\
+						lst.c 								\
+						memory_free.c						\
+						singleton.c							\
 						split.c								\
+						split_utils.c 						\
+						tokenisation.c						\
+						utils.c								\
+						utils2.c							\
 					)										\
 				)
 

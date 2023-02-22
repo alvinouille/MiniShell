@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 16:09:54 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/22 17:46:17 by mmeguedm         ###   ########.fr       */
+/*   Created: 2023/02/22 20:40:11 by mmeguedm          #+#    #+#             */
+/*   Updated: 2023/02/22 20:55:27 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#ifndef EXPANSION_H
+# define EXPANSION_H
 
-# include "tools.h"
+int		get_exp_size(char *env_var);
+int		get_var_size(char *str);
+char	*set_var(char *str);
+char	*expansion(char *str);
 
-int		ft_strlen(char *str);
-void	ft_putstr_fd(char *s, int fd);
-char	*ft_strnstr(char *big, char *little, int len);
-bool	ft_strcmp(const char *s1, const char *s2);
-int		get_state(char c);
-int		ft_isalnum(int c);
 
 #endif

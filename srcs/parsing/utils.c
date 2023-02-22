@@ -6,11 +6,13 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 16:29:15 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/20 23:47:49 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/22 17:17:29 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "stdlib.h"
+#include "stdbool.h"
+#include <unistd.h>
 
 int	ft_strlen(char *str)
 {

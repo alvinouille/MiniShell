@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 18:18:27 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/21 00:55:23 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/22 15:35:35 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 
 # include "tools.h"
 
-void	add_node_back_env(t_dblist *l, char *key, char *value);
-void	add_node_back_token(t_dblist *l, char *str, int *index);
-void	print_lst(t_dblist dblist);
-void	init_list(t_dblist *dblist);
+void		get_dblist(void (*fp)(t_dblist *), t_dblist **dblist);
+void		add_node_back_env(t_dblist *l, char *key, char *value);
+void		add_node_back_token(t_dblist *l, char *str, int *index);
+void		print_lst(t_dblist dblist);
+void		init_list(t_dblist *dblist);
 
 // void	*new_token(t_token **lst, char *str);
 // t_token	*ft_lstadd_back(t_token **lst, t_token *new);

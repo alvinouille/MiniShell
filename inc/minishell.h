@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:53:47 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/20 23:25:17 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/22 20:41:42 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "tools.h"
 # include "lst.h"
 # include "parsing.h"
+# include "expansion.h"
 
 /*	Declaration of the global variable required to manage the
 	exit_status code  */
