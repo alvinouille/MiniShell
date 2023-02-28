@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   inutils.c                                          :+:      :+:    :+:   */
+/*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/14 14:44:43 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/02/14 14:44:51 by ale-sain         ###   ########.fr       */
+/*   Created: 2023/02/22 20:40:11 by mmeguedm          #+#    #+#             */
+/*   Updated: 2023/02/22 20:55:27 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef EXPANSION_H
+# define EXPANSION_H
 
-void	print_lst(t_token *lst)
-{
-	while (lst)
-	{
-		printf("%s ", lst->value);
-		printf("%d\n", lst->type);
-		lst = lst->next;
-	}
-}
+int		get_exp_size(char *env_var);
+int		get_var_size(char *str);
+char	*set_var(char *str);
+char	*expansion(char *str);
+
+
+#endif
