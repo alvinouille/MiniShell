@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 22:02:38 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/21 18:49:55 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/27 19:40:36 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*get_token(char *str, int *k)
 			break ;
 		}
 	}
+	// printf("str : %s\n", &str[*k]);
 	dup[j] = '\0';
 	return (do_job(dup));
 }

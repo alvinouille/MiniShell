@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 14:42:29 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/02/22 16:24:05 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/28 00:52:39 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,12 @@ void	minishell(char *str, char **env)
 	token_generator(tab, dblist);
 	tokenisation(dblist);
 	get_dblist(NULL, &test);
-	// print_lst(test);
+	print_lst(*dblist);
+	printf("-----------\n");
 	split_state(dblist);
+	print_lst(*dblist);
+	// printf("size : %d\n", getsize(*dblist));
+	tokjoin(dblist);
 	// free_tab(tab, -1);
     // free(str);
     // lstclear(&dblist);

@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:09:54 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/22 17:46:17 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/27 23:56:24 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ char	*ft_strnstr(char *big, char *little, int len);
 bool	ft_strcmp(const char *s1, const char *s2);
 int		get_state(char c);
 int		ft_isalnum(int c);
+char	*ft_strjoin(char *line, char *buffer);
 
 #endif

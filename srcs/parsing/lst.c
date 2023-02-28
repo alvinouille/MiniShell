@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:32:27 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/22 16:23:05 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/27 21:46:52 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	print_lst(t_dblist dblist)
 {
 	while (dblist.first)
 	{
-		printf("value : %s\n", dblist.first->value);
+		printf("value : |%s|\n", dblist.first->value);
 		printf("%d\n", dblist.first->type);
 		dblist.first = dblist.first->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 21:28:29 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/22 23:36:44 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/27 21:01:46 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,25 @@
 	<State 1> remove quotes -> magic space
 	<State 2> remove quotes -> expand -> magic space
 */
+
+char 	*remove_quotes(char *str)
+{
+	char	*new;
+	char	state_char;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(char) * ft_strlen(str) - 1);
+	state_char = str[i];
+	str++;
+	while (str[i] && str[i] != state_char)
+	{
+		new[i] = str[i]; // i++ tout a droite
+		i++;
+	}
+	new[i] = 0;
+	return (new);
+}
 
 int	get_var_size(char *str)
 {
@@ -47,8 +66,6 @@ int	get_exp_size(char *env_var)
 	tmp = dblist->first_env;
 	while (tmp)
 	{
-		// printf("tmp->key : %s\n", tmp->key);
-		// printf("str : %s\n", env_var);
 		if (ft_strcmp(env_var, tmp->key))
 			return (ft_strlen(tmp->key));
 		tmp = tmp->next;
@@ -62,7 +79,7 @@ char	*set_var(char *str)
 	int			i;
 	int			j;
 
-	sh_var = malloc(sizeof(char) * get_var_size(str) + 1);
+	sh_var = malloc(sizeof(char) * get_var_size(str) + 2);
 	if (!sh_var)
 		return (free_exit(NULL), NULL);
 	j = 0;
@@ -77,6 +94,7 @@ char	*set_var(char *str)
 		i++;
 		j++;
 	}
+	sh_var[j] = 0;
 	return (sh_var);
 }
 
@@ -87,11 +105,10 @@ char	*var_expand(char *sh_var)
 	char		*expand;
 
 	get_dblist(NULL, &dblist);
+	printf("token : %s\n", sh_var);
 	tmp = dblist->first_env;
 	while (tmp)
 	{
-		// printf("sh_var : %s\n", sh_var);
-		// printf("tmp->value : %s\n", tmp->value);
 		if (ft_strcmp(sh_var, tmp->key))
 			return (tmp->value);
 		tmp = tmp->next;
@@ -106,25 +123,14 @@ char	*expansion(char *token)
 	char		*new;
 	int			i;
 
-	// i = 0;
 	sh_var = set_var(token);
-	// printf("sh_var : %s\n", sh_var);
-	// printf("")
 	new = malloc(sizeof(char) * ((get_exp_size(token)) - (get_var_size(token)) + 1));
 	if (!new)
 		return (free_exit(NULL), NULL);
 	new = var_expand(sh_var);
-	printf("new : %s\n", new);
-	// printf("str : %s\n", str);	
-	// printf("size : %d\n", set_var(str));
-	// print_lst(dblist);
-	// while (str[i] && str[i] != EXPAND)
-	// {
-
-	// 	i++;
-	// }
-	
-	return (NULL);
+	if (!new)
+		return (token);
+	return (new);
 }
 
 char	*state_00(char *str)
@@ -134,21 +140,28 @@ char	*state_00(char *str)
 
 char	*state_01(char *str)
 {
-	remove_quotes(str);
-	magic_space(str);
-	return (NULL);
+	char	*new;
+
+	new = remove_quotes(str);
+	magic_space(new);
+	return (new);
 }
 
 char	*state_02(char *str)
 {
-	remove_quotes(str);
-	expansion(str);
-	magic_space(str);
-	return (NULL);
+	char	*new;
+	char	*new2;
+	
+	new = remove_quotes(str);
+	new2 = expansion(new);
+	magic_space(new2);
+	return (new2);
 }
 
 void	magic_space(char *str)
 {
+	if (!str)
+		return ;
 	while (*str)
 	{
 		if (*str == SPACE)
@@ -175,27 +188,3 @@ char 	*do_job(char *str)
 	fp = handling_table(get_state(str[0]));
 	return (fp(str));
 }
-
-char 	*remove_quotes(char *str)
-{
-	char	*new;
-	char	state_char;
-	int		i;
-
-	i = 0;
-	new = malloc(sizeof(char) * ft_strlen(str) - 1);
-	state_char = str[i];
-	str++;
-	while (str[i] && str[i] != state_char)
-	{
-		new[i] = str[i]; // i++ tout a droite
-		i++;
-	}
-	new[i] = 0;
-	return (new);
-}
-
-// int	main(void)
-// {
-// 	remove_quotes("Hello World\n");
-// }
