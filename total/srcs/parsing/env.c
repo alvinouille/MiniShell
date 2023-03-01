@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:24:06 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/02/28 20:50:58 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:41:57 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ static pf	fct(int swtch)
 t_list	*handler(int swtch, char **env, char *arg)
 {
 	static t_list	*envp;
-	pf hand;
+	pf				hand;
 
 	hand = fct(swtch);
 	hand(&envp, env, arg);

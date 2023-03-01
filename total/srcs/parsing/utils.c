@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 16:29:15 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/28 20:43:41 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/03/01 16:24:19 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,19 +181,56 @@ char	*simple_join(char *s1, char *s2)
 	return (str);
 }
 
-int	ft_isalnum(int c)
-{
-	if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90)
-		|| (c >= 97 && c <= 122))
-		return (1);
-	else
-		return (0);
-}
-
 int	ft_isalpha(int c)
 {
 	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
 		return (1);
 	else
 		return (0);
+}
+
+int	ft_isalnum(int c)
+{
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+		|| (c >= '0' && c <= '9'));
+}
+
+char	*ft_strjoin(char *line, char *buffer)
+{
+	char	*p;
+	int		i;
+	int		j;
+
+	j = 0;
+	i = 0;
+	p = malloc(sizeof(char) * (ft_strlen((char *)line)
+				+ ft_strlen((char *)buffer)) + 1);
+	if (!p)
+		return (NULL);
+	if (line != NULL)
+	{
+		while (line[i])
+		{
+			p[i] = line[i];
+			i++;
+		}
+	}
+	while (buffer[j])
+		p[i++] = buffer[j++];
+	p[i] = '\0';
+	if (line != NULL)
+		free(line);
+	return (p);
+}
+
+bool	ft_strcmp(const char *s1, const char *s2)
+{	
+	unsigned int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && (s1[i] || s2[i]))
+		i++;
+	if (s1[i] == s2[i])
+		return (true);
+	return (false);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_token.c                                        :+:      :+:    :+:   */
+/*   split_state.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 22:02:38 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/01 15:57:04 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:17:29 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,30 +103,32 @@ static int	countwords(char *str)
 	return (word);
 }
 
-void	split_state(t_list	*list)
+void	split_state(t_list	*l)
 {
 	static int	index = 0;
-	t_list		new_dblist;
-	t_token		*tmp;
+	t_list		*new_list;
+	t_list		*tmp;
 	int			j;
 	t_token 	*data;
 	
-	data = (t_token *)(list->content);
-	init_list(&new_dblist);
-	while (list)
-	{
-		printf("list : %s\n", list->content);
-		list = list->next;
-	}
-	// while (tmp)
+	new_list = NULL;
+	tmp = l;
+	// while (list)
 	// {
-	// 	j = -1;
-	// 	while (++j < countwords(tmp->value))
-	// 		add_node_back_token(&new_dblist, tmp->value, &index);
-	// 	tmp = tmp->next;
-	// 	index = 0;
+	// 	printf("list : %s\n", ((t_token *)(list->content))->value);
+	// 	list = list->next;
 	// }
-
+	while (tmp)
+	{
+		data = (t_token *)(tmp->content);
+		j = -1;
+		while (++j < countwords(data->value))
+			add_node_back_token(&new_list, data->value, &index);
+		tmp = tmp->next;
+		index = 0;
+	}
+	printf("Hey\n");
+	print_lst(new_list, print_token);
 	// (*list) = new_dblist;
 }
 

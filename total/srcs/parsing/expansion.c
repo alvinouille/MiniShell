@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 21:28:29 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/27 21:01:46 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 18:04:55 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,14 @@ int	get_exp_size(char *env_var)
 	return (-1);
 }
 
-char	*set_var(char *str)
+int	set_var(char *str, char **sh_var)
 {
-	char		*sh_var;
 	int			i;
 	int			j;
 
-	sh_var = malloc(sizeof(char) * get_var_size(str) + 2);
-	if (!sh_var)
-		return (free_exit(NULL), NULL);
+	(*sh_var) = malloc(sizeof(char) * get_var_size(str) + 2);
+	if (!(*sh_var))
+		free_exit(NULL);
 	j = 0;
 	i = 0;
 	while (str[i] && str[i] != EXPAND)
@@ -90,30 +89,14 @@ char	*set_var(char *str)
 		i++;
 	while (str[i] && ft_isalnum(str[i]))
 	{
-		sh_var[j] = str[i];
+		(*sh_var)[j] = str[i];
 		i++;
 		j++;
 	}
-	sh_var[j] = 0;
-	return (sh_var);
-}
-
-char	*var_expand(char *sh_var)
-{
-	t_dblist	*dblist;
-	t_env		*tmp;
-	char		*expand;
-
-	get_dblist(NULL, &dblist);
-	printf("token : %s\n", sh_var);
-	tmp = dblist->first_env;
-	while (tmp)
-	{
-		if (ft_strcmp(sh_var, tmp->key))
-			return (tmp->value);
-		tmp = tmp->next;
-	}
-	return (NULL);
+	(*sh_var)[j] = 0;
+	if (str[i] == '_')
+		return (1);
+	return (0);
 }
 
 char	*expansion(char *token)
@@ -122,14 +105,20 @@ char	*expansion(char *token)
 	char		*sh_var;
 	char		*new;
 	int			i;
+	int			res;
 
-	sh_var = set_var(token);
+	res = set_var(token, &sh_var);
+	if (res)
+		return (NULL);
+	if (sh_var[0] == 0)
+		return (token);
 	new = malloc(sizeof(char) * ((get_exp_size(token)) - (get_var_size(token)) + 1));
 	if (!new)
 		return (free_exit(NULL), NULL);
-	new = var_expand(sh_var);
+	new = ft_getenv(sh_var);
+	printf("sh_var : %s\n", sh_var);
 	if (!new)
-		return (token);
+		return (NULL);
 	return (new);
 }
 

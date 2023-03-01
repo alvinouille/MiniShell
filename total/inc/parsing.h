@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 20:25:50 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/28 20:30:23 by ale-sain         ###   ########.fr       */
+/*   Updated: 2023/03/01 16:03:17 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 char 	*remove_quotes(char *str);
 char	*do_job(char *str);
-void	split_state(t_dblist *old_dblist);
+void	split_state(t_list	*list);
 char	*get_token(char *str, int *k);
 char	**ft_split(char const *s, char c);
 void	magic_space(char *str);

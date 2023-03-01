@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:12:42 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/01 15:47:43 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:37:03 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 # define TOOLS_H
 
 # define EXPAND 36
+
+typedef enum e_env_setting{
+	CREATING,
+	DELETING,
+	ADDING,
+	MODIFYING, 
+	CLEANING,
+	GETTING,
+	APPENDING
+}	t_env_setting;
 
 extern int g_exit_status;
 
@@ -30,6 +40,23 @@ typedef enum e_type
 	DROUT,
 	PIPE
 }	t_type;
+
+typedef struct s_token
+{
+	char			*value;
+	int				type;
+	struct s_token	*next;
+	struct s_token	*prev;
+}					t_token;
+
+
+typedef	struct	s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+	struct s_env	*prev;
+}					t_env;
 
 typedef struct s_dblist
 {
@@ -55,27 +82,11 @@ typedef struct s_cmd
 	int			outfile;
 }				t_cmd;
 
-typedef struct s_token
-{
-	char			*value;
-	int				type;
-	struct s_token	*next;
-	struct s_token	*prev;
-}					t_token;
-
 typedef struct s_gc
 {
 	void			*addr;
 	struct	s_gc	*next;
 }					t_gc;
-
-typedef	struct	s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-	struct s_env	*prev;
-}					t_env;
 
 typedef struct s_llptr
 {

@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 19:53:35 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/03/01 15:57:28 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:19:13 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ void	token_generator(char **tab)
 		exit(0);
 	}
 	tokenisation(&t_lst);
-	if (!parse_error(t_lst))
-	{
-		ft_lstclear(&t_lst, token_cleaner);
-		handler(4, NULL, NULL);
-		return ;
-	}
+	// if (!parse_error(t_lst))
+	// {
+	// 	ft_lstclear(&t_lst, token_cleaner);
+	// 	handler(4, NULL, NULL);
+	// 	return ;
+	// }
 	return (split_state(t_lst));
 	// return (expansion(t_lst));
 	// return (cmd_generator(&t_lst));
