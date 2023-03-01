@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 16:29:15 by alvina            #+#    #+#             */
-/*   Updated: 2023/03/01 16:24:19 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:45:22 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,12 @@ int	ft_isalnum(int c)
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
 		|| (c >= '0' && c <= '9'));
 }
+
+int	ft_issign(int c)
+{
+	return ((c == '+') || (c == '-') || (c == '^'));
+}
+
 
 char	*ft_strjoin(char *line, char *buffer)
 {

@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:09:54 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/01 16:24:17 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:56:49 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ char	*simple_join(char *s1, char *s2);
 
 char	*ft_strjoin(char *line, char *buffer);
 bool	ft_strcmp(const char *s1, const char *s2);
+int		ft_issign(int c);
 
 #endif
