@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 22:02:38 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/01 15:45:22 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 15:57:04 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,21 +109,25 @@ void	split_state(t_list	*list)
 	t_list		new_dblist;
 	t_token		*tmp;
 	int			j;
-	t_token *data;
+	t_token 	*data;
 	
 	data = (t_token *)(list->content);
 	init_list(&new_dblist);
-	tmp = list->dblist->first;
-	while (tmp)
+	while (list)
 	{
-		j = -1;
-		while (++j < countwords(tmp->value))
-			add_node_back_token(&new_dblist, tmp->value, &index);
-		tmp = tmp->next;
-		index = 0;
+		printf("list : %s\n", list->content);
+		list = list->next;
 	}
+	// while (tmp)
+	// {
+	// 	j = -1;
+	// 	while (++j < countwords(tmp->value))
+	// 		add_node_back_token(&new_dblist, tmp->value, &index);
+	// 	tmp = tmp->next;
+	// 	index = 0;
+	// }
 
-	(*list) = new_dblist;
+	// (*list) = new_dblist;
 }
 
 // int main(int argc, char **argv)
