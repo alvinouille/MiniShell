@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 21:28:29 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/27 21:01:46 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/02 18:30:31 by ale-sain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,31 +57,68 @@ int	get_var_size(char *str)
 	return (vr_size);
 }
 
-int	get_exp_size(char *env_var)
+int	get_exp_size(char *token)
 {
-	t_dblist	*dblist;
-	t_env		*tmp;
-
-	get_dblist(NULL, &dblist);
-	tmp = dblist->first_env;
-	while (tmp)
+	int	i;
+	int	j;
+	int size;
+	char	*sh_var;
+	
+	size = 0;
+	i = 0;
+	while (token[i])
 	{
-		if (ft_strcmp(env_var, tmp->key))
-			return (ft_strlen(tmp->key));
-		tmp = tmp->next;
+		j = 0;
+		if (token[i] == EXPAND)
+		{
+			i++;
+			sh_var = malloc(sizeof(char) * (get_var_size(&token[i]) + 1));
+			while (token[i] && ft_isalnum(token[i]))
+			{
+				sh_var[j] = token[i];
+				i++;
+				j++;
+			}
+			sh_var[j] = 0;
+			size += ft_strlen(ft_getenv(sh_var));
+			free(sh_var);
+			sh_var = NULL;
+		}
+		else
+		{
+			i++;
+			size++;
+		}	
 	}
-	return (-1);
+	return (size);
 }
 
-char	*set_var(char *str)
+void	fill_sign_var(char *token, char **sign_var)
 {
-	char		*sh_var;
+	int	i;
+
+	i = 0;
+	while (token[i])
+		i++;
+	(*sign_var) = malloc(sizeof(char) * (i + 10));
+	i = 0;
+	while (token[i])
+	{
+		(*sign_var)[i] = token[i];
+		i++;
+	}
+	(*sign_var)[i] = 0;
+}
+
+
+int	set_var(char *str, char **sh_var, char **sign_var)
+{
 	int			i;
 	int			j;
 
-	sh_var = malloc(sizeof(char) * get_var_size(str) + 2);
-	if (!sh_var)
-		return (free_exit(NULL), NULL);
+	(*sh_var) = malloc(sizeof(char) * get_var_size(str) + 2);
+	if (!(*sh_var))
+		free_exit(NULL);
 	j = 0;
 	i = 0;
 	while (str[i] && str[i] != EXPAND)
@@ -90,30 +127,35 @@ char	*set_var(char *str)
 		i++;
 	while (str[i] && ft_isalnum(str[i]))
 	{
-		sh_var[j] = str[i];
+		(*sh_var)[j] = str[i];
 		i++;
 		j++;
 	}
-	sh_var[j] = 0;
-	return (sh_var);
+	if (str[i] == '_')
+		return (1);
+	(*sh_var)[j] = 0;
+	if (ft_issign(str[i]))
+		return (fill_sign_var(&str[i], sign_var), 2);
+	return (0);
 }
 
-char	*var_expand(char *sh_var)
+void	fill_sign_new(char **new, char *sign_var)
 {
-	t_dblist	*dblist;
-	t_env		*tmp;
-	char		*expand;
-
-	get_dblist(NULL, &dblist);
-	printf("token : %s\n", sh_var);
-	tmp = dblist->first_env;
-	while (tmp)
+	int	i;
+	int	len_sign;
+	
+	len_sign = ft_strlen(sign_var);
+	i = 0;
+	while ((*new)[i])
+		i++;
+	while (len_sign >= 0)
 	{
-		if (ft_strcmp(sh_var, tmp->key))
-			return (tmp->value);
-		tmp = tmp->next;
+		(*new)[i] = *sign_var;
+		len_sign--;
+		i++;
+		sign_var++;
 	}
-	return (NULL);
+	(*new)[i] = 0;
 }
 
 char	*expansion(char *token)
@@ -121,15 +163,78 @@ char	*expansion(char *token)
 	t_dblist	*dblist;
 	char		*sh_var;
 	char		*new;
+	char		*str;
+	char		*sign_var;
+	int			res;
 	int			i;
-
-	sh_var = set_var(token);
-	new = malloc(sizeof(char) * ((get_exp_size(token)) - (get_var_size(token)) + 1));
-	if (!new)
-		return (free_exit(NULL), NULL);
-	new = var_expand(sh_var);
-	if (!new)
-		return (token);
+	int			j;
+	int			k;
+	
+	i = 0;
+	k = 0;
+	new = malloc(sizeof(char) * (get_exp_size(token) + 1));
+	while (token[i])
+	{
+		j = 0;
+		if (token[i] == EXPAND)
+		{
+			i++;
+			sh_var = malloc(sizeof(char) * (get_var_size(&token[i]) + 1));
+			while (token[i] && ft_isalnum(token[i]))
+			{
+				sh_var[j] = token[i];
+				i++;
+				j++;
+			}
+			if (token[i] == '_')
+			{
+				free(sh_var);
+				i++;
+				continue;
+			}
+			sh_var[j] = 0;
+			j = 0;
+			str = ft_getenv(sh_var);
+			free(sh_var);
+			if (!str)
+			{
+				if (token[i - 1] == '$')
+				{
+					new[k] = token[i - 1];
+					k++;
+				}
+				continue;
+			}
+			while (str[j])
+			{
+				new[k] = str[j];
+				k++;
+				j++;
+			}
+			free(str);
+			sh_var = NULL;
+		}
+		else
+		{
+			new[k] = token[i];
+			k++;
+			i++;
+		}	
+	}
+	new[k] = 0;
+	// res = set_var(token, &sh_var, &sign_var);
+	// if (res == 1)
+	// 	return (NULL);
+	// if (sh_var[0] == 0)
+	// 	return (token);
+	// // new = malloc(10000);
+	// if (!new)
+	// 	return (free_exit(NULL), NULL);
+	// new = ft_getenv(sh_var);
+	// if (!new) 
+	// 	return (NULL);
+	// if (res == 2)
+	// 	fill_sign_new(&new, sign_var);
 	return (new);
 }
 
@@ -141,7 +246,8 @@ char	*state_00(char *str)
 char	*state_01(char *str)
 {
 	char	*new;
-
+	
+	// printf("str1 : %s\n", str);
 	new = remove_quotes(str);
 	magic_space(new);
 	return (new);
@@ -152,6 +258,7 @@ char	*state_02(char *str)
 	char	*new;
 	char	*new2;
 	
+	// printf("str2 : %s\n", str);
 	new = remove_quotes(str);
 	new2 = expansion(new);
 	magic_space(new2);

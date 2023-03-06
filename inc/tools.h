@@ -6,18 +6,26 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:12:42 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/22 19:49:30 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 17:37:03 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOOLS_H
 # define TOOLS_H
 
-# define INIT (1 << 0)
-# define NO_INIT (1 << 1)
-
-
 # define EXPAND 36
+
+typedef enum e_env_setting{
+	CREATING,
+	DELETING,
+	ADDING,
+	MODIFYING, 
+	CLEANING,
+	GETTING,
+	APPENDING
+}	t_env_setting;
+
+extern int g_exit_status;
 
 typedef char * (*t_fp_exp)(char *str);
 
@@ -41,17 +49,6 @@ typedef struct s_token
 	struct s_token	*prev;
 }					t_token;
 
-typedef struct s_gc
-{
-	void			*addr;
-	struct	s_gc	*next;
-}					t_gc;
-
-typedef struct s_cmd
-{
-	int	a;
-	int	b;
-}					t_cmd;
 
 typedef	struct	s_env
 {
@@ -61,12 +58,6 @@ typedef	struct	s_env
 	struct s_env	*prev;
 }					t_env;
 
-typedef struct s_llptr
-{
-	t_token			*token;
-	t_cmd			*cmd;
-}					t_llptr;
-
 typedef struct s_dblist
 {
 	t_token			*first;
@@ -74,6 +65,34 @@ typedef struct s_dblist
 	t_env			*first_env;
 	t_env			*prev_env;
 }					t_dblist;
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}					t_list;
+
+typedef void (*pf)(t_list **, char **, char *);
+
+typedef struct s_cmd
+{
+	t_list 		*arg;
+	t_list 		*red;
+	int			infile;
+	int			outfile;
+}				t_cmd;
+
+typedef struct s_gc
+{
+	void			*addr;
+	struct	s_gc	*next;
+}					t_gc;
+
+typedef struct s_llptr
+{
+	t_token			*token;
+	t_cmd			*cmd;
+}					t_llptr;
 
 typedef enum e_state
 {

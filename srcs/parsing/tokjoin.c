@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 21:18:56 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/28 01:15:29 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/01 16:15:48 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	getsize(t_dblist dblist)
 	return (size);
 }
 
-void	create_token(t_dblist *dblist, char *new)
+void	create_token_momo(t_dblist *dblist, char *new)
 {
 	t_token		*tmp;
 	char		**split;
@@ -59,5 +59,5 @@ void	tokjoin(t_dblist *dblist)
 		new = ft_strjoin(new, tmp->value);
 		tmp = tmp->next;
 	}
-	create_token(dblist, new);
+	create_token_momo(dblist, new);
 }

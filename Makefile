@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+         #
+#    By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/03/02 17:23:34 by ale-sain         ###   ########.fr        #
+#    Updated: 2023/03/01 20:40:10 by mmeguedm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 NAME		= minishell
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -I $(INC_PATH)
+CFLAGS		= -Wall -Wextra -I $(INC_PATH) -g3
 
 LIBS		= -L/usr/local/lib -I/usr/local/include -lreadline
 
@@ -49,19 +49,23 @@ INC			= $(addprefix $(INC_PATH),		\
 SRC			=	$(addprefix $(SRC_PATH),					\
 					main/main.c								\
 					$(addprefix parsing/,					\
-						add_token.c							\
-						tokjoin.c							\
-						error.c								\
-						expansion.c							\
+						cmd_creator.c						\
+						env.c								\
 						first_split.c						\
-						lst.c 								\
-						memory_free.c						\
+						lst_utils.c							\
+						parse_error.c						\
+						split_utils.c						\
+						token_creator.c						\
+						tokenisation.c						\
+						trash.c								\
+						utils.c								\
+						split_state.c						\
+						error.c								\
+						tokjoin.c							\
+						lst.c								\
+						expansion.c							\
 						singleton.c							\
 						split.c								\
-						split_utils.c 						\
-						tokenisation.c						\
-						utils.c								\
-						utils2.c							\
 					)										\
 				)
 
@@ -104,3 +108,16 @@ fclean : clean
 re : fclean $(NAME)
 
 .PHONY : all clean fclean re directories test
+
+# add_token.c							\
+# error.c								\
+# expansion.c							\
+# first_split.c						\
+# lst.c 								\
+# memory_free.c						\
+# singleton.c							\
+# split.c								\
+# split_utils.c 						\
+# tokenisation.c						\
+# utils.c								\
+# utils2.c							\

@@ -1,42 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split.c                                            :+:      :+:    :+:   */
+/*   first_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:55:05 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/20 23:31:39 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/02/28 20:47:59 by ale-sain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	length(char *str, int *state)
+
+int	length(char *str)
 {
 	int	i;
+	int state;
 
 	i = 0;
 	if (!str)
 		return (0);
+	state = changing_state((char)-2);
 	while (str[i])
 	{
-		if (*state == 0 && is_separator(&str[i]))
+		if (state == 0 && is_separator(&str[i]))
 			return (i);
 		i++;
-		*state = changing_state(str[i], *state);
+		state = changing_state(str[i]);
 	}
 	return (i);
 }
 
-int    wording_sep(char *str, char ***tab, int j, int (*f)(char *))
+static int    red_str(char *str, char ***tab, int j, int (*f)(char *))
 {
     int i;
-
     i = 0;
-    (*tab)[j] = malloc(sizeof(char) * (f(str) + 1));
+
+	(*tab)[j] = malloc(sizeof(char) * (f(str) + 1));
     if (!(*tab)[j])
-		return (free_tab(*tab, j), 0);
+	{
+		free_tab(*tab, j);
+		return (0);
+	}
 	while (f(&str[i]) && str[i])
 	{
 		(*tab)[j][i] = str[i];
@@ -46,16 +52,19 @@ int    wording_sep(char *str, char ***tab, int j, int (*f)(char *))
 	return (i);
 }
 
-int		wording_other(char *str, char ***tab, int j, int *state)
+static int		word_str(char *str, char ***tab, int j)
 {
 	int	i;
 	int	len;
 
 	i = 0;
-	len = length(str, state);
+	len = length(str);
 	(*tab)[j] = malloc(sizeof(char) * len + 1);
 	if (!(*tab)[j])
-		return (free_tab(*tab, j), 0);
+	{
+		free_tab(*tab, j);
+		return (0);
+	}
 	while (i < len)
 	{
 		(*tab)[j][i] = str[i];
@@ -65,51 +74,80 @@ int		wording_other(char *str, char ***tab, int j, int *state)
 	return (i);
 }
 
-char	**splitting(char **tab, char *str, int state)
+static int	spliter(char *substr, char **tab, int *j, char *str)
+{
+	int	a;
+
+	if (is_pipe(substr))
+		a = red_str(substr, &tab, *j, is_pipe);
+	else if (is_red(substr))
+		a = red_str(substr, &tab, *j, is_red);
+	else
+		a = word_str(substr, &tab, *j);
+	if (!a)
+	{
+		handler(4, NULL, NULL);
+		free(str);
+		exit(0);
+	}
+	(*j)++;
+	return (a);
+}
+
+char	**splitting(char **tab, char *str)
 {
 	int	j;
 	int	i;
+	int state;
 
 	i = 0;
 	j = 0;
+	state = changing_state((char)-1);
 	while (str[i])
 	{
-        state = changing_state(str[i], state);
+        state = changing_state(str[i]);
         if (state == 0 && is_separator(&str[i]))
-        {
-            if (!is_space(&str[i]))
-            {
-                if (is_pipe(&str[i]))
-                    i += wording_sep(&str[i], &tab, j, is_pipe);
-				else
-                    i += wording_sep(&str[i], &tab, j, is_red);
-			    j++;
-            }
-			else
-				i++;
-        }
-		else if (str[i] != ' ' || state != 0)
 		{
-			i += wording_other(&str[i], &tab, j, &state);
-			j++;
+			if (!is_space(&str[i]))
+				i += spliter(&str[i], tab, &j, str) -1;
 		}
-		else
-			i++;
+		else if (str[i] != ' ' || state != 0)
+			i += spliter(&str[i], tab, &j, str) -1;
+		i++;
 	}
 	tab[j] = 0;
 	return (tab);
 }
 
-char	**first_split(char *str)
+void	first_split(char *str)
 {
 	char	**tab;
-    int     state;
 
-    state = 0;
-	if (!str)
-		return (NULL);
+	if (!str || str[0] == 0)
+	{
+		free(str);
+		handler(4, NULL, NULL);
+		return ;
+	}
+	if (count_words(str) == 0)
+	{
+		free(str);
+		handler(4, NULL, NULL);
+		return ;
+	}
 	tab = (char **) malloc(sizeof(char *) * (count_words(str) + 1));
 	if (!tab)
-		return (NULL);
-	return (splitting(tab, str, state));
+	{
+		free(str);
+		handler(4, NULL, NULL);
+		return ;
+	}
+	tab = splitting(tab, str);
+	free(str);
+	if (!tab)
+	{
+		handler(4, NULL, NULL);
+		exit(0);
+	}
+	return (token_generator(tab));
 }
