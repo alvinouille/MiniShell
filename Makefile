@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+         #
+#    By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/02/27 23:46:05 by mmeguedm         ###   ########.fr        #
+#    Updated: 2023/03/02 17:23:34 by ale-sain         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LIBS		= -L/usr/local/lib -I/usr/local/include -lreadline
 
 # --------- Include files path ------------------------------------------------------
 
-INC_PATH	= /mnt/nfs/homes/mmeguedm/Desktop/Projects/MiniShell/inc/
+INC_PATH	= inc/
 
 # --------- Sources files path ------------------------------------------------------
 
