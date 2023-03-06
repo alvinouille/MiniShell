@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 17:24:06 by ale-sain          #+#    #+#             */
-/*   Updated: 2023/03/01 17:41:57 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/06 16:47:15 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ char	*ft_getenv(char *name)
 	data = (t_env *)envp->content;
 	if (!name || !envp)
 		return (NULL);
-	while (envp && ft_strncmp(data->key, name, ft_strlen(name)))
+	while (envp && !ft_strcmp(data->key, name))
 	{
 		envp = envp->next;
-		if (envp)
-			data = (t_env *)envp->content;
+		data = (t_env *)envp->content;
 	}
 	if (!envp || ft_strlen(name) != ft_strlen(data->key))
 		return (NULL);

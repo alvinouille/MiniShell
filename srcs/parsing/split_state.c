@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 22:02:38 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/01 17:17:29 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:58:00 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ char	*get_token(char *str, int *k)
 			break ;
 		}
 	}
-	// printf("str : %s\n", &str[*k]);
 	dup[j] = '\0';
 	return (do_job(dup));
 }
@@ -107,56 +106,32 @@ void	split_state(t_list	*l)
 {
 	static int	index = 0;
 	t_list		*new_list;
+	t_list		*subdivide_token;
 	t_list		*tmp;
-	int			j;
 	t_token 	*data;
-	
+	int			j;
+	int			count;
+
+	count = 0;	
+	subdivide_token = NULL;
 	new_list = NULL;
 	tmp = l;
-	// while (list)
-	// {
-	// 	printf("list : %s\n", ((t_token *)(list->content))->value);
-	// 	list = list->next;
-	// }
 	while (tmp)
 	{
 		data = (t_token *)(tmp->content);
 		j = -1;
 		while (++j < countwords(data->value))
-			add_node_back_token(&new_list, data->value, &index);
+		{
+			// printf("data->value : %s\n", &data->value[index]);
+			add_node_back_token(&subdivide_token, data->value, &index);
+		}
+		if (j > 0)
+			tokjoin(&subdivide_token);
+		ft_lstadd_back(&new_list, subdivide_token);
+		subdivide_token = NULL;
 		tmp = tmp->next;
 		index = 0;
 	}
-	printf("Hey\n");
 	print_lst(new_list, print_token);
-	// (*list) = new_dblist;
+	// (*l) = *new_list;
 }
-
-// int main(int argc, char **argv)
-// {
-// 	int		i;
-// 	char	*str1;
-// 	char	*str2;
-// 	t_token	*head;
-// 	t_token	*splited;
-	
-// 	// str1  = "'\"\"'\"a\"$L'+2'$HOME_\"'''\"ab  ";
-// 	i = 0;
-// 	str1  = "echo";
-// 	str2 = "\"a\"$L'+2'$HOME_";
-// 	new_token(&head, str1);
-// 	new_token(&head, str2);
-// 	splited = split_state(head);
-// 	while (splited != NULL)
-// 	{
-// 		i++;
-// 		// printf("str : %s\n", splited->value);
-// 		splited = splited->next;
-// 	}
-// 	printf("i : %d\n", i);
-// 	// while (splited[i])
-// 	// {
-// 	// 	printf("splited : |%s|\n", splited[i]);
-// 	// 	i++;
-// 	// }
-// }

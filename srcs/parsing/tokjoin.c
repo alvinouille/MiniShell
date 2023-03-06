@@ -6,58 +6,78 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 21:18:56 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/01 16:15:48 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2023/03/06 19:55:22 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	getsize(t_dblist dblist)
+static int	getsize(t_list *list)
 {
-	int	size;
-
+	int		size;
+	t_token	*data;
+	
+	data = (t_token *)(list->content);
 	size = 0;
-	while (dblist.first)
+	while (list)
 	{
-		size += ft_strlen(dblist.first->value);
-		dblist.first = dblist.first->next;
+		data = (t_token *)(list->content);
+		size += ft_strlen(data->value);
+		list = list->next;
 	}
 	return (size);
 }
 
-void	create_token_momo(t_dblist *dblist, char *new)
+static void	join_token(t_list **list, char *new)
 {
-	t_token		*tmp;
+	t_list		*new_list;
+	t_list		*new_node;
+	t_token		*data;
 	char		**split;
 	int			i;
 	
 	i = 0;
-	tmp = dblist->first;
+	new_list = NULL;
 	split = ft_split(new, ' ');
 	while (split[i])
-		i++;
-	printf("i : %d\n", i);
-	while (i > 0)
 	{
-		tmp->value = split[i];
-		printf("tmp->value : %s\n", tmp->value);
-		i--;
+		data = create_token(split[i]);
+		if (!data)
+		{
+			free_tab(split, -1);
+			ft_lstclear(&new_list, token_cleaner);
+			handler(4, NULL, NULL);
+			exit(0);
+		}
+		new_node = ft_lstnew(data);
+		if (!new_node)
+		{
+			free_tab(split, -1);
+			ft_lstclear(&new_list, token_cleaner);
+			handler(4, NULL, NULL);
+			exit(0);
+		}
+        new_list = ft_lstadd_back(&new_list, new_node);
+		i++;
 	}
+	ft_lstclear(list, token_cleaner);
+	(*list) = new_list;
 }
 
-void	tokjoin(t_dblist *dblist)
+void	tokjoin(t_list **list)
 {
 	char		*new;
-	t_token		*tmp;
-	// t_dblist	*new;
+	t_list		*tmp;
+	t_token		*data;
 
-	new = NULL;
-	tmp = dblist->first;
-	new = malloc(sizeof(char) * getsize(*dblist) + 1);
+	tmp = (*list);
+	data = (t_token *)((*list)->content);
+	new = malloc(sizeof(char) * getsize(*(list)) + 1);
 	while (tmp)
 	{
-		new = ft_strjoin(new, tmp->value);
+		data = (t_token *)(tmp->content);
+		new = ft_strjoin(new, data->value);
 		tmp = tmp->next;
 	}
-	create_token_momo(dblist, new);
+	join_token(list, new);
 }
