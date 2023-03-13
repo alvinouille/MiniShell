@@ -6,7 +6,7 @@
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:53:15 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/08 19:54:56 by mmeguedm         ###   ########.fr       */
+/*   Updated: 2022/12/01 19:42:08 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	readed = 1;
-	buffer = malloc(sizeof(char) * (1 + 1));
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	while (readed && !ft_newline(line))
 	{
-		readed = read(fd, buffer, 1);
+		readed = read(fd, buffer, BUFFER_SIZE);
 		if (readed == -1)
 			return (free(buffer), NULL);
 		if (!readed)

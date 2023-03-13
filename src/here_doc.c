@@ -3,68 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 17:32:12 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/11 18:59:53 by alvina           ###   ########.fr       */
+/*   Created: 2022/11/21 16:41:49 by mmeguedm          #+#    #+#             */
+/*   Updated: 2023/02/16 21:30:54 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pipex.h"
+#include "utils.h"
+#include "error.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-
-void	nul_character(char *limiter)
+void	nul_character(t_data *data)
 {
 	ft_putstr_fd("\nwarning: here-document ", STDOUT_FILENO);
 	ft_putstr_fd("delimited by end-of-file (wanted ", STDOUT_FILENO);
-	ft_putstr_fd(limiter, STDOUT_FILENO);
+	ft_putstr_fd(data->args.argv[2], STDOUT_FILENO);
 	ft_putstr_fd(")\n", STDOUT_FILENO);
 }
 
-static void do_here_doc(t_list **lst, char *limiter)
+void	here_doc(t_data *data)
 {
 	char	*line;
 
 	line = NULL;
-	printf("HERE_DOC\n");
-	while (!ft_strcmp(line, limiter))
+	while (!ft_strcmp(line, data->args.argv[2]))
 	{
 		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
-			return (ft_lstclear(lst, token_cleaner) ,free_exit(NULL));
+			return (exit_error(ERR_MEM));
 		if (!*line)
 		{
-			nul_character(limiter);
+			nul_character(data);
 			break ;
 		}
-		if (ft_strcmp(line, limiter))
+		if (ft_strcmp(line, data->args.argv[2]))
 			break ;
-		ft_putstr_fd(line, ((t_cmd *)((*lst)->content))->pfd[1]);
+		ft_putstr_fd(line, data->pfd[1]);
 		if (!ft_strcmp(line, "\n"))
-			ft_putstr_fd("\n", ((t_cmd *)((*lst)->content))->pfd[1]);
+			ft_putstr_fd("\n", data->pfd[1]);
 	}
 	free(line);
-}
-
-void	here_doc(t_list **list) 
-{
-	t_list	*tmp;
-	t_cmd	*cmd;
-	t_token	*token;
-	
-	tmp = (*list);
-	while (tmp)
-	{
-		cmd = (t_cmd *)(tmp->content);
-		if (cmd->red)
-		{
-			token = (t_token *)(cmd->red->content);
-			if (token && token->type == DRIN)
-				do_here_doc(list, token->value);
-		}
-		tmp = tmp->next;
-	}
-	return (opening(list));
 }

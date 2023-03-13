@@ -3,103 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   tools.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alvina <alvina@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 16:12:42 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/11 18:52:08 by alvina           ###   ########.fr       */
+/*   Created: 2022/09/02 13:24:33 by mmeguedm          #+#    #+#             */
+/*   Updated: 2023/02/18 01:48:51 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOOLS_H
 # define TOOLS_H
 
-# define EXPAND 36
+/* The open() system call requires these preprocessor directives  */
+# include<sys/types.h>
+# include<sys/stat.h>
+# include <fcntl.h>
 
-typedef enum e_env_setting{
-	CREATING,
-	DELETING,
-	ADDING,
-	MODIFYING, 
-	CLEANING,
-	GETTING,
-	APPENDING
-}	t_env_setting;
-
-extern int g_exit_status;
-
-typedef char * (*t_fp_exp)(char *str);
-
-typedef enum e_type
+/* Definition of boolean type  */
+typedef enum e_bool
 {
-	WORD,
-	FD,
-	LIM,
-	RIN,
-	ROUT,
-	DRIN,
-	DROUT,
-	PIPE
-}	t_type;
+	FALSE,
+	TRUE
+}	t_bool;
 
-typedef struct s_token
+/* Definition of ERROR_SIGNAL  */
+typedef enum e_sig_err {
+	ERR_OPEN,
+	ERR_ARG,
+	ERR_EXIST,
+	ERR_EXE,
+	ERR_FORK,
+	ERR_PIPE,
+	ERR_MEM,
+	ERR_ENV,
+	ERR_PATH,
+	ERR__LENGHT
+}	t_sig_err;
+
+/* It required by exit_error in <main.c> to handle differents
+   types of errors  */
+typedef struct s_error
 {
-	char			*value;
-	int				type;
-	struct s_token	*next;
-	struct s_token	*prev;
-}					t_token;
+	int		sig_err;
+	char	*sig_msg;
+}			t_error;
 
-
-typedef	struct	s_env
+typedef struct s_args
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-	struct s_env	*prev;
-}					t_env;
+	int		argc;
+	char	**argv;
+	char	**env;
+}			t_args;
+
+typedef struct s_storage_cmd
+{
+	char					**path;
+	char					**bin_args;
+	char					*bin_path;
+	char					*bin;
+	int						pos;
+	struct s_storage_cmd	*next;
+	struct s_storage_cmd	*prev;
+}							t_storage_cmd;
 
 typedef struct s_dblist
 {
-	t_token			*first;
-	t_token			*last;
-	t_env			*first_env;
-	t_env			*prev_env;
+	t_storage_cmd	*first;
+	t_storage_cmd	*last;
 }					t_dblist;
 
-typedef struct s_list
+typedef struct s_data
 {
-	void			*content;
-	struct s_list	*next;
-}					t_list;
-
-typedef void (*pf)(t_list **, char **, char *);
-
-typedef struct s_cmd
-{
-	t_list 		*arg;
-	t_list 		*red;
-	int			pfd[2];
-	int			infile;
-	int			outfile;
-}				t_cmd;
-
-typedef struct s_gc
-{
-	void			*addr;
-	struct	s_gc	*next;
-}					t_gc;
-
-typedef struct s_llptr
-{
-	t_token			*token;
-	t_cmd			*cmd;
-}					t_llptr;
-
-typedef enum e_state
-{
-	NONE,
-	SP_QUOTES,
-	DB_QUOTES
-}	t_state;
+	int				pfd[2];
+	int				fd_in;
+	int				fd[2];
+	int				nb_cmd;
+	pid_t			*pid;
+	t_args			args;
+	t_dblist		dblist;
+}					t_data;
 
 #endif

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 16:09:54 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/03/08 19:57:11 by mmeguedm         ###   ########.fr       */
+/*   Created: 2022/09/02 14:15:13 by mmeguedm          #+#    #+#             */
+/*   Updated: 2022/12/02 15:48:23 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,33 @@
 # define UTILS_H
 
 # include "tools.h"
-# include "stdbool.h"
+# define BUFFER_SIZE 1
 
-int		ft_strlen(char *str);
-void	ft_putstr_fd(char *s, int fd);
-char	*ft_strnstr(char *big, char *little, int len);
-bool	ft_strcmp(const char *s1, const char *s2);
-int		get_state(char c);
-int		ft_isalnum(int c);
+void		ft_putstr_fd(char *s, int fd);
+char		*ft_strnchr(const char *s1, const char *s2, size_t len);
+size_t		ft_strlen(const char *str);
+char		*ft_strjoin_path(char *line, char *buffer);
+char		**ft_split(char const *s, char c);
+void		freemem(t_data *data);
+char		*ft_strdup(const char *src);
+t_bool		ft_strcmp(char *s1, char *s2);
+char		*ft_strjoin(char *line, char *buffer);
+char		*get_next_line(int fd);
+void		close_fds(t_data *data);
+void		cmd_not_found(t_data *data, t_storage_cmd *node);
 
-void	ft_putendl_fd(char *s, int fd);
-char	*ft_strdup(char *s);
-int		ft_strncmp(char *s1, char *s2, int n);
-char	*join(char *s1, char *s2);
-int		ft_strchr(char *str, char c);
-int		ft_isalpha(int c);
-char	*simple_join(char *s1, char *s2);
+/*	It required to manage doubly linked list  */
+void		add_node_back(t_dblist *l, char *cmd, char *env[], t_data *data);
+void		init_list(t_data *data);
+void		add_node_front(t_dblist *l, int val);
+void		lstfree(t_data *l);
 
-char	*ft_strjoin(char *line, char *buffer);
-int		ft_issign(int c);
-char	*get_next_line(int fd);
+/*  Extra functions required to make works norminette  */
+void		extra_launcher(t_data *data, int i);
+char		**extra_bin_args(char *cmd, char *bin, int i);
+void		extra_init(t_data *data);
+void		extra_loop_free(t_storage_cmd *node);
+void		loop_job(t_data *data, t_storage_cmd *tmp, int i);
+void		do_job(t_data *data, t_storage_cmd *node);
 
 #endif

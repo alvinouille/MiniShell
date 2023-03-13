@@ -1,126 +1,46 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: alvina <alvina@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/02/17 17:30:47 by mmeguedm          #+#    #+#              #
-#    Updated: 2023/03/11 19:01:32 by alvina           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME = pipex
 
-# --------- Prerequisites ------------------------------------------------------
+CC = cc
 
-NAME		= minishell
+CFLAGS = -Wall -Werror -Wextra
 
-CC			= cc
-CFLAGS		= -Wall -Wextra -I $(INC_PATH) -g3
+SRC_PATH = src/
+INC_PATH = inc/
+OBJ_PATH = obj/
 
-LIBS		= -L/usr/local/lib -I/usr/local/include -lreadline
+SRCS =  error.c				\
+		get.c				\
+		here_doc.c			\
+		main.c				\
+		get_next_line.c		\
+		list.c				\
+		extra.c				\
+		split.c				\
+		utils.c				\
+		utils2.c
 
-# --------- Include files path ------------------------------------------------------
+OBJ = ${SRCS:.c=.o}
 
-INC_PATH	= inc/
+OBJS = $(addprefix $(OBJ_PATH), $(OBJ))
 
-# --------- Sources files path ------------------------------------------------------
-
-SRC_PATH	= srcs/
-PS_SRC_PATH	= $(SRC_PATH)parsing/
-MN_SRC_PATH	= $(SRC_PATH)main/
-
-# --------- Objects files path ------------------------------------------------------
-
-OBJ_PATH	= obj/
-PS_OBJ_PATH = $(OBJ_PATH)parsing/
-MN_OBJ_PATH = $(OBJ_PATH)main/
-
-# --------- Header files -----------------------------------------------------------
-
-INC			= $(addprefix $(INC_PATH),		\
-					minishell.h				\
-					tools.h					\
-					utils.h					\
-					lst.h					\
-				)
-
-# --------- Sources files -----------------------------------------------------------
-
-SRC			=	$(addprefix $(SRC_PATH),					\
-					main/main.c								\
-					$(addprefix parsing/,					\
-						cmd_creator.c						\
-						env.c								\
-						first_split.c						\
-						lst_utils.c							\
-						parse_error.c						\
-						split_utils.c						\
-						token_creator.c						\
-						tokenisation.c						\
-						trash.c								\
-						utils.c								\
-						split_state.c						\
-						get_next_line.c						\
-						error.c								\
-						tokjoin.c							\
-						lst.c								\
-						expansion.c							\
-						here_doc.c							\
-						singleton.c							\
-						split.c								\
-						opening.c							\
-					)										\
-				)
-
-# --------- Object files ------------------------------------------------------------
-
-OBJ			=	$(patsubst srcs/%.c, obj/%.o, $(SRC))
-
-# --------- Compiling ---------------------------------------------------------------
-
-obj/%.o: srcs/%.c $(INC)
-	@ mkdir -p $(dir $@)
-	@ printf "%-60s\r" "Compiling $<"
-	@ $(CC) $(CFLAGS) -c $< -o $@
-
-# --------- Linking -----------------------------------------------------------------
-
-$(NAME) : $(OBJ) $(INC) Makefile
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBS)
-	@printf "\n\n"
-	@echo "\033[1;32mCompiling done !"
-	@echo "\033[1;36m"
-	@cat .femtoshell.logo.c
-	@echo "\033[0m"
-
-# --------- Phony targets -----------------------------------------------------------
+	@echo [CC] $<
+	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_PATH)
 
 all : $(NAME)
 
-test : fclean $(NAME)
-
-test : CFLAGS+= -g3 -fsanitize=address -MMD
+$(NAME) : $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@printf "\n"
+	@echo "Compiling done"
 
 clean :
-		rm -rf $(OBJ_PATH) 
+	rm -rf $(OBJS)
 
 fclean : clean
-		rm -rf $(NAME)
+	rm -rf $(NAME)
 
 re : fclean $(NAME)
 
-.PHONY : all clean fclean re directories test
-
-# add_token.c							\
-# error.c								\
-# expansion.c							\
-# first_split.c						\
-# lst.c 								\
-# memory_free.c						\
-# singleton.c							\
-# split.c								\
-# split_utils.c 						\
-# tokenisation.c						\
-# utils.c								\
-# utils2.c							\
+.PHONY : all clean fclean re

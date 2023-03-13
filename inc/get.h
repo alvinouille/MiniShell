@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   get.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-sain <ale-sain@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/24 18:33:29 by alvina            #+#    #+#             */
-/*   Updated: 2023/02/28 20:47:12 by ale-sain         ###   ########.fr       */
+/*   Created: 2022/10/24 15:41:15 by mmeguedm          #+#    #+#             */
+/*   Updated: 2022/12/01 19:50:19 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef GET_H
+# define GET_H
 
-void    ft_env(void)
-{
-    t_list   *envp;
+# include "tools.h"
 
-    envp = handler(5, NULL, NULL);
-    g_exit_status = 0;
-    print_lst(envp, print_env);
-}
+char	*get_bin(char *cmd);
+char	**get_path(char	*env[]);
+char	*get_bin_path(char *cmd, char *bin, char **path);
+char	**get_bin_args(char *cmd, char *bin);
+
+#endif

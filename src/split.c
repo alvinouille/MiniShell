@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmeguedm <mmeguedm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/20 23:34:30 by mmeguedm          #+#    #+#             */
-/*   Updated: 2023/02/27 19:01:54 by mmeguedm         ###   ########.fr       */
+/*   Created: 2022/09/06 18:30:00 by mmeguedm          #+#    #+#             */
+/*   Updated: 2022/12/02 14:42:38 by mmeguedm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 static int	ft_strrlen(const char *str)
 {
